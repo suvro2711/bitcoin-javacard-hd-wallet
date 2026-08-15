@@ -1,0 +1,1 @@
+SMARTCARD_READER = 'Generic EMV Smartcard Reader 0'
