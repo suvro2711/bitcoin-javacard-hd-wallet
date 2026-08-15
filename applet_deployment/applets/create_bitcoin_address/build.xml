@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CreateBitcoinAddressApplet" default="build" basedir=".">
+
+    <!-- Paths to tools -->
+    <property name="tools.dir" value="D:/Personal/monero/javacard_tools"/>
+    <property name="sdk.dir" value="${tools.dir}/oracle_javacard_sdks/jc305u3_kit"/>
+
+    <!-- Import ant-javacard task -->
+    <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="${tools.dir}/ant-javacard.jar"/>
+
+    <target name="build">
+        <javacard jckit="${sdk.dir}">
+            <cap output="out/create_bitcoin_address.cap"
+                 sources="src"
+                 aid="A000000001030100"
+                 package="com.monero.bitcoin"
+                 version="1.0">
+                <applet class="com.monero.bitcoin.CreateBitcoinAddressApplet"
+                        aid="A00000000103010001"/>
+            </cap>
+        </javacard>
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="out"/>
+    </target>
+
+</project>

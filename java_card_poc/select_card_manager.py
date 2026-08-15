@@ -15,6 +15,22 @@ from constants import SMARTCARD_READER
 
 SELECT_ISD = [0x00, 0xA4, 0x04, 0x00, 0x00]
 
+# GET STATUS, P1=0x40 (Applications), P2=0x00, data 4F 00 (empty search
+# qualifier -> return all). GlobalPlatform Card Spec section 11.4.
+GET_STATUS_APPLICATIONS = [0x80, 0xF2, 0x40, 0x00, 0x02, 0x4F, 0x00]
+
+
+def get_status_applications(connection):
+    data, sw1, sw2 = connection.transmit(GET_STATUS_APPLICATIONS)
+    print("GET STATUS (apps) ->", toHexString(data), f"{sw1:02X} {sw2:02X}")
+
+    if (sw1, sw2) == (0x90, 0x00):
+        print("Success: no applets installed" if not data else "Success")
+    else:
+        print("Card returned a non-success status word")
+
+    return data, sw1, sw2
+
 
 def main():
     available = readers()
@@ -33,8 +49,9 @@ def main():
 
     if (sw1, sw2) == (0x90, 0x00):
         print("Success: card responded to SELECT")
+        get_status_applications(connection)
     else:
-        print("Card returned a non-success status word")
+        print("Card returned a non-success status word", sw1, sw2)
 
 def get_reader():
     available_readers = readers()
@@ -55,4 +72,8 @@ def create_connection(reader):
 if __name__ == "__main__":
     reader = get_reader()
     if reader:
-        create_connection(reader)
+        connection = create_connection(reader)
+        data, sw1, sw2 = connection.transmit(SELECT_ISD)
+        print("SELECT ISD ->", toHexString(data), f"{sw1:02X} {sw2:02X}")
+        if (sw1, sw2) == (0x90, 0x00):
+            get_status_applications(connection)
