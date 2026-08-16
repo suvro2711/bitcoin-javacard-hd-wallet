@@ -27,6 +27,10 @@ if __name__ == "__main__":
 
 from applet_deployment.constants.APDU import _APDU_RESPONSE_RE, GET_STATUS_APPLICATIONS
 from applet_deployment.constants.constants import GP_JAR_PATH, SMARTCARD_READER, SW_SUCCESS
+from applet_deployment.constants.create_bitcoin_address import (
+    AID as CREATE_BITCOIN_ADDRESS_AID,
+    INS_GENERATE_ENTROPY,
+)
 
 
 def run_gp(*args):
@@ -111,11 +115,6 @@ def send_apdu_to_applet(aid_hex, hex_apdu):
     if (select_sw1, select_sw2) != SW_SUCCESS:
         raise RuntimeError(f"SELECT {aid_hex} failed: {select_sw1:02X}{select_sw2:02X}")
     return responses[1]
-
-
-# CreateBitcoinAddressApplet -- see applets/create_bitcoin_address/.
-CREATE_BITCOIN_ADDRESS_AID = "A00000000103010001"
-INS_GENERATE_ENTROPY = "30"
 
 
 def generate_entropy():

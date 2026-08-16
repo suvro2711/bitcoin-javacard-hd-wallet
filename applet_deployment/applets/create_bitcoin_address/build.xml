@@ -8,7 +8,22 @@
     <!-- Import ant-javacard task -->
     <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="${tools.dir}/ant-javacard.jar"/>
 
-    <target name="build">
+    <!-- Regenerates Constants.java and constants.properties from
+         ../../constants/create_bitcoin_address.json -- the source of truth
+         shared with the Python client (see
+         ../../constants/create_bitcoin_address.py and gen_java_constants.py). -->
+    <target name="gen-constants">
+        <exec executable="python" failonerror="true">
+            <arg value="../../constants/gen_java_constants.py"/>
+            <arg value="../../constants/create_bitcoin_address.json"/>
+            <arg value="com.monero.bitcoin"/>
+            <arg value="src/com/monero/bitcoin/Constants.java"/>
+            <arg value="constants.properties"/>
+        </exec>
+        <property file="constants.properties"/>
+    </target>
+
+    <target name="build" depends="gen-constants">
         <javacard jckit="${sdk.dir}">
             <cap output="out/create_bitcoin_address.cap"
                  sources="src"
@@ -16,7 +31,7 @@
                  package="com.monero.bitcoin"
                  version="1.0">
                 <applet class="com.monero.bitcoin.CreateBitcoinAddressApplet"
-                        aid="A00000000103010001"/>
+                        aid="${aid}"/>
             </cap>
         </javacard>
     </target>

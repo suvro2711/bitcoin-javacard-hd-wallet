@@ -16,7 +16,6 @@ import javacard.security.RandomData;
  */
 public class CreateBitcoinAddressApplet extends Applet {
 
-    private static final byte INS_GENERATE_ENTROPY = (byte) 0x30;
     private static final short ENTROPY_LENGTH = (short) 32; // 256 bits
 
     private RandomData trng;
@@ -40,7 +39,7 @@ public class CreateBitcoinAddressApplet extends Applet {
         }
 
         byte[] buffer = apdu.getBuffer();
-        if (buffer[ISO7816.OFFSET_INS] != INS_GENERATE_ENTROPY) {
+        if (buffer[ISO7816.OFFSET_INS] != Constants.INS_GENERATE_ENTROPY) {
             ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
         }
         if (trng == null) {
