@@ -28,7 +28,7 @@ if __name__ == "__main__":
 from applet_deployment.constants.APDU import _APDU_RESPONSE_RE, GET_STATUS_APPLICATIONS
 from applet_deployment.constants.constants import GP_JAR_PATH, SMARTCARD_READER, SW_SUCCESS
 from applet_deployment.constants.create_bitcoin_address import (
-    AID as CREATE_BITCOIN_ADDRESS_AID,
+    AID as CREATE_BITCOIN_ADDRESS_APPLET_AID,
     INS_GENERATE_ENTROPY,
 )
 
@@ -122,7 +122,7 @@ def generate_entropy():
     (32 bytes) straight from the card's hardware TRNG (ALG_TRNG, no DRBG
     conditioning)."""
     data, sw1, sw2 = send_apdu_to_applet(
-        CREATE_BITCOIN_ADDRESS_AID, f"00{INS_GENERATE_ENTROPY}000020"
+        CREATE_BITCOIN_ADDRESS_APPLET_AID, f"00{INS_GENERATE_ENTROPY}000020"
     )
     if (sw1, sw2) != SW_SUCCESS:
         raise RuntimeError(f"generate_entropy failed: {sw1:02X}{sw2:02X}")

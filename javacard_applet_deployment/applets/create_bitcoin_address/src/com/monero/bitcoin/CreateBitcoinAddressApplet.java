@@ -26,6 +26,8 @@ public class CreateBitcoinAddressApplet extends Applet {
         } catch (CryptoException e) {
             trng = null;
         }
+        // runs once and updates java card with the applet
+        // and the instances within the applet like the RandomData instance
         register();
     }
 
